@@ -1,5 +1,6 @@
 package com.template.project
 
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
@@ -16,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
@@ -36,11 +38,14 @@ import com.template.project.feature.profile.presentation.ProfileRoute
 import com.template.project.feature.profile.presentation.ProfileScreenRoot
 import com.template.project.feature.search.presentation.SearchRoute
 import com.template.project.feature.search.presentation.SearchScreenRoot
+import com.template.project.feature.settings.domain.AppPreferences
+import com.template.project.feature.settings.domain.model.ThemeMode
 import com.template.project.feature.settings.presentation.SettingsRoute
 import com.template.project.feature.settings.presentation.SettingsScreenRoot
 import com.template.project.navigation.AuthGraph
 import com.template.project.navigation.MainGraph
 import org.koin.compose.KoinContext
+import org.koin.compose.koinInject
 
 private data class BottomNavItem(
     val label: String,
@@ -59,7 +64,17 @@ private val bottomNavItems = listOf(
 @Composable
 fun App() {
     KoinContext {
-        AppTheme {
+        val appPreferences = koinInject<AppPreferences>()
+        val themeMode by appPreferences.observeThemeMode()
+            .collectAsStateWithLifecycle(initialValue = ThemeMode.SYSTEM)
+
+        val isDarkTheme = when (themeMode) {
+            ThemeMode.LIGHT -> false
+            ThemeMode.DARK -> true
+            ThemeMode.SYSTEM -> isSystemInDarkTheme()
+        }
+
+        AppTheme(darkTheme = isDarkTheme) {
             val navController = rememberNavController()
 
             NavHost(
