@@ -19,9 +19,16 @@ internal fun Project.configureAndroidTarget() {
 
 internal fun Project.configureIosTargets() {
     extensions.configure<KotlinMultiplatformExtension> {
-        iosX64()
-        iosArm64()
-        iosSimulatorArm64()
+        listOf(
+            iosX64(),
+            iosArm64(),
+            iosSimulatorArm64()
+        ).forEach {
+            it.binaries.framework {
+                baseName = "ComposeApp"
+                isStatic = true
+            }
+        }
     }
 }
 

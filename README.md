@@ -139,7 +139,28 @@ cd TemplateKMP
 <details>
 <summary><b>🍎 iOS</b></summary>
 
-Open the `/iosApp` directory in Xcode and run it, or use the KMP run configuration in Android Studio / Fleet.
+**Option 1 — Xcode:**
+
+Open `iosApp/iosApp.xcodeproj` in Xcode, select a simulator, and click ▶ Run.
+
+**Option 2 — CLI:**
+
+```bash
+# 1. Build (replace simulator name as needed)
+xcodebuild -project iosApp/iosApp.xcodeproj -scheme iosApp \
+  -destination 'platform=iOS Simulator,name=iPhone 16e' \
+  -configuration Debug build
+
+# 2. Install on booted simulator
+xcrun simctl install booted \
+  ~/Library/Developer/Xcode/DerivedData/iosApp-*/Build/Products/Debug-iphonesimulator/TemplateKmp.app
+
+# 3. Launch
+xcrun simctl launch booted com.template.project.TemplateKmp
+```
+
+> **Note:** If the simulator does not appear in Xcode destinations, ensure `IPHONEOS_DEPLOYMENT_TARGET` in the Xcode project is ≤ your simulator's iOS version.
+
 </details>
 
 <details>
