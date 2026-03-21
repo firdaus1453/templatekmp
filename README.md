@@ -109,6 +109,12 @@ core/presentation → core/domain + core/designsystem
 
 ---
 
+## 📖 Developer Guide
+
+**New to this template?** Check out our comprehensive **[Developer Guide (GUIDE.md)](GUIDE.md)** — a step-by-step tutorial for junior developers covering everything from environment setup to production release.
+
+---
+
 ## 🚀 Getting Started
 
 ### Prerequisites
