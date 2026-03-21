@@ -3,7 +3,7 @@ package com.template.project.core.data.di
 import com.template.project.core.data.auth.createPlatformDataStore
 import org.koin.dsl.module
 
-val platformDataStoreModule = module {
+actual val platformDataStoreModule = module {
     single {
         createPlatformDataStore()
     }

@@ -13,8 +13,7 @@ import org.koin.dsl.bind
 import org.koin.dsl.module
 
 val coreDataModule = module {
-    // DataStore<Preferences> is provided by
-    // platformDataStoreModule (platform-specific DI)
+    includes(platformDataStoreModule)
 
     singleOf(::DataStoreSessionStorage).bind<SessionStorage>()
 
