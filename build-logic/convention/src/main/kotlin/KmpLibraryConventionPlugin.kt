@@ -2,7 +2,6 @@ import com.android.build.api.dsl.LibraryExtension
 import com.template.convention.configureKotlinAndroid
 import com.template.convention.configureKotlinMultiplatform
 import com.template.convention.libs
-import com.template.convention.pathToResourcePrefix
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
@@ -18,12 +17,11 @@ class KmpLibraryConventionPlugin : Plugin<Project> {
                 apply("org.jetbrains.kotlin.plugin.serialization")
             }
 
-            configureKotlinMultiplatform()
-
             extensions.configure<LibraryExtension> {
                 configureKotlinAndroid(this)
-                resourcePrefix = this@with.pathToResourcePrefix()
             }
+
+            configureKotlinMultiplatform()
 
             dependencies {
                 "commonMainImplementation"(libs.findLibrary("kotlinx-serialization-json").get())

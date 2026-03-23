@@ -34,9 +34,3 @@ kotlin {
         }
     }
 }
-
-// Chucker HTTP inspector — debug only, no-op in release
-dependencies {
-    "debugImplementation"(libs.chucker.debug)
-    "releaseImplementation"(libs.chucker.release)
-}

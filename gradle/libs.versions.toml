@@ -1,6 +1,6 @@
 [versions]
 # Build tools
-agp = "8.11.2"
+agp = "9.1.0"
 kotlin = "2.3.0"
 ksp = "2.3.6"
 
@@ -33,7 +33,7 @@ coil-network = "3.3.0"
 buildkonfig = "0.17.1"
 kermit = "2.0.6"
 kover = "0.9.1"
-chucker = "4.1.0"
+
 kotlinxCoroutinesTest = "1.10.2"
 turbine = "1.2.0"
 
@@ -42,7 +42,7 @@ kotlinx-coroutines-swing = "1.10.2"
 
 # Android desugar
 androidDesugarJdkLibs = "2.1.5"
-androidTools = "31.12.0"
+androidTools = "32.0.0"
 
 # Project config — CHANGE THESE for your project
 projectApplicationId = "com.template.project"
@@ -148,9 +148,7 @@ turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
 androidx-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 androidx-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 
-# Chucker (Android-only HTTP inspector)
-chucker-debug = { module = "com.github.chuckerteam.chucker:library", version.ref = "chucker" }
-chucker-release = { module = "com.github.chuckerteam.chucker:library-no-op", version.ref = "chucker" }
+
 
 [plugins]
 # Convention plugins (defined in build-logic)
@@ -165,6 +163,7 @@ convention-kover = { id = "template.kover", version = "unspecified" }
 # Android
 android-application = { id = "com.android.application", version.ref = "agp" }
 android-library = { id = "com.android.library", version.ref = "agp" }
+android-kotlin-multiplatform-library = { id = "com.android.kotlin.multiplatform.library", version.ref = "agp" }
 
 # Kotlin
 kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
