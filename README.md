@@ -36,7 +36,8 @@
 ```
 TemplateKMP/
 ├── 🔧 build-logic/convention/         # 9 Gradle convention plugins
-├── 📱 composeApp/                      # Composition root (Android, iOS, Desktop)
+├── 📱 androidApp/                      # Pure Android Entry Point
+├── 📱 composeApp/                      # Composition root & Shared UI (Android, iOS, Desktop)
 ├── 🏗️ core/
 │   ├── domain/                         # Pure Kotlin: Result, DataError, interfaces
 │   ├── data/                           # Ktor, DataStore, SessionStorage
@@ -57,6 +58,7 @@ TemplateKMP/
 ### Dependency Rules
 
 ```
+androidApp → composeApp
 composeApp → core/* + feature/*/
 feature/*/presentation → feature/*/domain + core/presentation + core/designsystem
 feature/*/data → feature/*/domain + core/domain + core/data
@@ -138,10 +140,10 @@ cd TemplateKMP
 
 ```bash
 # 1. Build debug APK
-./gradlew :composeApp:assembleDebug
+./gradlew :androidApp:assembleDebug
 
 # 2. Install to connected device/emulator
-adb install composeApp/build/outputs/apk/debug/composeApp-debug.apk
+adb install androidApp/build/outputs/apk/debug/androidApp-debug.apk
 
 # 3. Launch the app
 adb shell am start -n com.template.project/.MainActivity
@@ -190,7 +192,7 @@ xcrun simctl boot "iPhone 16"
 
 # 3. Build the project
 xcodebuild -project iosApp/iosApp.xcodeproj -scheme iosApp \
-  -destination 'platform=iOS Simulator,name=iPhone 16' \
+  -destination 'platform=iOS Simulator,name=iPhone 16e' \
   -configuration Debug build
 
 # 4. Install on booted simulator

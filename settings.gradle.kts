@@ -34,6 +34,7 @@ plugins {
 }
 
 // App entry point
+include(":androidApp")
 include(":composeApp")
 
 // Core modules

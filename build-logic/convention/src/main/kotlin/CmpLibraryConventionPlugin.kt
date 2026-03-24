@@ -21,7 +21,6 @@ class CmpLibraryConventionPlugin : Plugin<Project> {
                 "commonMainImplementation"(compose.foundation)
                 "commonMainImplementation"(compose.material3)
                 "commonMainImplementation"(compose.materialIconsExtended)
-                "debugImplementation"(libs.findLibrary("androidx-compose-ui-tooling").get())
             }
         }
     }
