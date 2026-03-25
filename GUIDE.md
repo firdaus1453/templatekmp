@@ -37,6 +37,7 @@
 | Software | Versi Minimum | Keterangan |
 |----------|---------------|------------|
 | **Android Studio** | Ladybug (2024.2+) | IDE utama, sudah termasuk KMP plugin |
+| **AGP** | 9.1+ | Base config & KMP conventions |
 | **JDK** | 17+ | Wajib untuk Gradle dan kompilasi Kotlin |
 | **Xcode** | 15+ | Hanya untuk macOS, diperlukan untuk build iOS |
 | **Xcode Command Line Tools** | - | `xcode-select --install` |
@@ -250,7 +251,7 @@ build-logic/
 | Main app module | `template.cmp.application` | `composeApp` |
 | Butuh database Room | `template.room` | (tambahkan di modul yang perlu) |
 | Butuh build constants | `template.buildkonfig` | `core/data` |
-| Butuh code coverage | `template.kover` | (tambahkan di semua modul yang ada test) |
+| Butuh code coverage | `template.kover` | (wajib ada tes minimal 1/dummy test, cegah "No tests discovered") |
 
 ### 4.4 Contoh Penggunaan
 
@@ -1324,10 +1325,12 @@ class HomeViewModelTest {
 ```
 
 > 💡 **Tips Testing:**
-> - Selalu gunakan `Dispatchers.setMain(testDispatcher)` di `@BeforeTest`
+> - Selalu gunakan `Dispatchers.setMain(testDispatcher)` di `@BeforeTest` dan `resetMain()` di `@AfterTest` (Cegah Deadlock ViewModel Turbine)
 > - Selalu gunakan `Dispatchers.resetMain()` di `@AfterTest`
 > - Gunakan `testDispatcher.scheduler.advanceUntilIdle()` untuk "menjalankan" semua pending coroutine
 > - Gunakan Turbine `.test {}` untuk assert Flow emissions
+> - **Gotcha Kover:** Pastikan ada minimal 1 test (dummy test diperbolehkan) agar task Kover tidak error "No tests discovered".
+> - **Gotcha Turbine:** Cancel Unconsumed Events setelah assert Flow selesai jika ada background IO coroutine. Kover Android spoof di-handle otomatis oleh `KoverConventionPlugin`.
 
 ---
 
@@ -1548,6 +1551,8 @@ Untuk mengganti dari `com.template.project` ke package name kamu:
 | **iOS build error** | Pastikan Xcode Command Line Tools terinstall: `xcode-select --install` |
 | **HTTP request timeout** | Cek koneksi internet, cek base URL di `local.properties` |
 | **Flow tidak emit data** | Pastikan menggunakan `SharingStarted.WhileSubscribed(5_000)` dan subscriber aktif |
+| **ViewModel Test Deadlock/Hang** | Pastikan menggunakan `Dispatchers.setMain` dan cancel unconsumed turbine events |
+| **Kover task error "No tests discovered"** | Tambahkan minimal satu *dummy test* di modul tersebut |
 | **Token refresh loop** | Pastikan endpoint login/register di-skip dari auth: `sendWithoutRequest { ... }` |
 | **`CancellationException` crash** | **Jangan pernah** catch `CancellationException` — selalu re-throw |
 | **Room migration error** | Periksa schema directory dan migration steps |

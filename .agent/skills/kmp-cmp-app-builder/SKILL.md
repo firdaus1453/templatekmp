@@ -11,10 +11,10 @@ description: >
   "KMP", such as asking to share code between Android and iOS or build a cross-platform app.
 compatibility: >
   Requires Android Studio Ladybug or later (or IntelliJ IDEA with KMP plugin), JDK 17+,
-  Xcode 15+ for iOS targets, Kotlin 2.1+, and Compose Multiplatform 1.7+.
+  Xcode 15+ for iOS targets, Kotlin 2.1+, Compose Multiplatform 1.7+, and AGP 9.1+.
 metadata:
   author: kmp-expert
-  version: "4.0"
+  version: "4.1"
 ---
 
 # KMP/CMP Application Builder
@@ -123,6 +123,7 @@ See [OFFLINE_FIRST.md](references/OFFLINE_FIRST.md).
 - [ ] Create `Fake*` stubs for all interfaces
 - [ ] Write ViewModel tests with `runTest` + `Turbine`
 - [ ] Apply Kover to testable modules
+- [ ] Ensure at least one test exists (add a simple dummy test if needed) to prevent "No tests discovered" Kover failure
 - [ ] Run: `./gradlew allTests koverHtmlReport`
 - [ ] Integrate Chucker for Android debug HTTP inspection
 
@@ -178,11 +179,16 @@ See [PRODUCTION.md](references/PRODUCTION.md).
 - Kover `koverVerify` will fail CI if coverage drops below minimum bound.
 - Use `Dispatchers.setMain(testDispatcher)` in `@BeforeTest` and `resetMain()` in `@AfterTest`.
 - Never use `println()` or `Log.d()` — use Kermit (multiplatform) or Timber (Android-only).
+- **AGP 9 + KMP Library Plugin:** The project uses `com.android.kotlin.multiplatform.library`. This requires AGP 9 and changes Android target config (no `android { ... }` blocks needed in pure KMP modules).
+- **Kover 0.9.x vs AGP 9:** Kover crashes on KMP library modules due to missing Android variants. The `KoverConventionPlugin` injects a spoofed empty `android` extension to bypass this.
+- **ViewModel Test Deadlocks:** Tests with Turbine can hang if IO dispatchers are active. Cancel unconsumed events before the test ends or manually cancel the scope.
+- **Test Discovery Failure:** Modules with Kover applied but zero tests will fail the build with "No tests discovered" errors during Kover tasks. Always add a dummy test if needed.
 
 ## Technology stack
 
 | Technology | Purpose | Version |
 |-----------|---------|---------|
+| AGP | Android build tools | 9.1+ |
 | Kotlin | Language | 2.1+ |
 | Compose Multiplatform | UI framework | 1.7+ |
 | Koin | DI | 4.0+ |

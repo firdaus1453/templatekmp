@@ -95,6 +95,7 @@ core/presentation → core/domain + core/designsystem
 
 | Technology | Version | Purpose |
 |-----------|---------|---------|
+| [AGP](https://developer.android.com/studio/releases/gradle-plugin) | 9.1+ | Android build tools |
 | [Kotlin](https://kotlinlang.org) | 2.3.0 | Language |
 | [Compose Multiplatform](https://www.jetbrains.com/compose-multiplatform/) | 1.10.0 | UI framework |
 | [Koin](https://insert-koin.io) | 4.1.0 | Dependency injection |
@@ -124,6 +125,7 @@ core/presentation → core/domain + core/designsystem
 - **Android Studio Ladybug** or later (or IntelliJ IDEA with KMP plugin)
 - **JDK 17+**
 - **Xcode 15+** (for iOS targets)
+- **AGP 9.1+** (Internal KMP conventions)
 
 ### Clone & Build
 
@@ -266,8 +268,8 @@ xcrun simctl launch booted com.template.project.TemplateKmp
 
 Each feature module includes:
 - **Fake repositories** for unit testing
-- **ViewModel tests** using Turbine for Flow assertions
-- **Kover** integration for code coverage reporting
+- **ViewModel tests** using Turbine for Flow assertions (use `Dispatchers.setMain(testDispatcher)` to prevent deadlocks)
+- **Kover** integration for code coverage reporting (ensure at least 1 test per module to prevent "No tests discovered")
 
 ---
 

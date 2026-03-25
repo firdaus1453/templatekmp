@@ -51,7 +51,7 @@ class ProfileViewModelTest {
     }
 
     @Test
-    fun successfulProfileFetchUpdatesState() = runTest {
+    fun successfulProfileFetchUpdatesState() = runTest(testDispatcher) {
         fakeProfileRepository.currentUserResult = Result.Success(testUser)
         viewModel = ProfileViewModel(fakeProfileRepository, fakeLogoutHandler)
 
@@ -63,12 +63,12 @@ class ProfileViewModelTest {
             val loaded = awaitItem()
             assertFalse(loaded.isLoading)
             assertNotNull(loaded.user)
-            assertEquals("emilys", loaded.user!!.username)
+            assertEquals("emilys", loaded.user.username)
         }
     }
 
     @Test
-    fun failedProfileFetchEmitsError() = runTest {
+    fun failedProfileFetchEmitsError() = runTest(testDispatcher) {
         fakeProfileRepository.currentUserResult =
             Result.Error(DataError.Network.UNAUTHORIZED)
         viewModel = ProfileViewModel(fakeProfileRepository, fakeLogoutHandler)
@@ -88,11 +88,12 @@ class ProfileViewModelTest {
 
             val event = awaitItem()
             assertIs<ProfileEvent.ShowError>(event)
+            cancelAndIgnoreRemainingEvents()
         }
     }
 
     @Test
-    fun logoutCallsRepositoryAndEmitsEvent() = runTest {
+    fun logoutCallsRepositoryAndEmitsEvent() = runTest(testDispatcher) {
         viewModel = ProfileViewModel(fakeProfileRepository, fakeLogoutHandler)
 
         viewModel.events.test {
@@ -106,7 +107,7 @@ class ProfileViewModelTest {
     }
 
     @Test
-    fun refreshTriggersNewProfileFetch() = runTest {
+    fun refreshTriggersNewProfileFetch() = runTest(testDispatcher) {
         fakeProfileRepository.currentUserResult = Result.Success(testUser)
         viewModel = ProfileViewModel(fakeProfileRepository, fakeLogoutHandler)
 
@@ -118,10 +119,10 @@ class ProfileViewModelTest {
 
             viewModel.onAction(ProfileAction.OnRefresh)
             testDispatcher.scheduler.advanceUntilIdle()
-            expectMostRecentItem()
-
-            assertEquals(2, fakeProfileRepository.fetchCallCount)
+            
+            cancelAndIgnoreRemainingEvents()
         }
+        assertEquals(2, fakeProfileRepository.fetchCallCount)
     }
 }
 

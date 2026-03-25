@@ -67,7 +67,7 @@ class HomeViewModelTest {
     }
 
     @Test
-    fun successfulFetchUpdatesStateWithProducts() = runTest {
+    fun successfulFetchUpdatesStateWithProducts() = runTest(testDispatcher) {
         fakeProductRepository.productsResult = Result.Success(testProducts)
         viewModel = HomeViewModel(fakeProductRepository)
 
@@ -85,7 +85,7 @@ class HomeViewModelTest {
     }
 
     @Test
-    fun errorFetchKeepsEmptyProducts() = runTest {
+    fun errorFetchKeepsEmptyProducts() = runTest(testDispatcher) {
         fakeProductRepository.productsResult =
             Result.Error(DataError.Network.SERVER_ERROR)
         viewModel = HomeViewModel(fakeProductRepository)
@@ -95,14 +95,14 @@ class HomeViewModelTest {
 
             testDispatcher.scheduler.advanceUntilIdle()
 
-            val afterError = expectMostRecentItem()
-            assertFalse(afterError.isLoading)
-            assertTrue(afterError.products.isEmpty())
+            cancelAndIgnoreRemainingEvents()
         }
+        assertFalse(viewModel.state.value.isLoading)
+        assertTrue(viewModel.state.value.products.isEmpty())
     }
 
     @Test
-    fun refreshTriggersNewFetch() = runTest {
+    fun refreshTriggersNewFetch() = runTest(testDispatcher) {
         fakeProductRepository.productsResult = Result.Success(testProducts)
         viewModel = HomeViewModel(fakeProductRepository)
 
@@ -114,14 +114,14 @@ class HomeViewModelTest {
 
             viewModel.onAction(HomeAction.OnRefresh)
             testDispatcher.scheduler.advanceUntilIdle()
-            expectMostRecentItem()
-
-            assertEquals(2, fakeProductRepository.fetchCallCount)
+            
+            cancelAndIgnoreRemainingEvents()
         }
+        assertEquals(2, fakeProductRepository.fetchCallCount)
     }
 
     @Test
-    fun onProductClickEmitsNavigateEvent() = runTest {
+    fun onProductClickEmitsNavigateEvent() = runTest(testDispatcher) {
         viewModel = HomeViewModel(fakeProductRepository)
 
         viewModel.events.test {

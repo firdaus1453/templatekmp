@@ -43,7 +43,7 @@ class SearchViewModelTest {
     }
 
     @Test
-    fun initialStateIsEmpty() = runTest {
+    fun initialStateIsEmpty() = runTest(testDispatcher) {
         viewModel.state.test {
             val initial = awaitItem()
             assertEquals("", initial.query)
@@ -53,7 +53,7 @@ class SearchViewModelTest {
     }
 
     @Test
-    fun queryChangeUpdatesState() = runTest {
+    fun queryChangeUpdatesState() = runTest(testDispatcher) {
         viewModel.state.test {
             awaitItem() // initial
 
@@ -64,7 +64,7 @@ class SearchViewModelTest {
     }
 
     @Test
-    fun searchReturnsResultsAfterDebounce() = runTest {
+    fun searchReturnsResultsAfterDebounce() = runTest(testDispatcher) {
         fakeSearchRepository.searchResult = Result.Success(testResults)
 
         viewModel.state.test {
@@ -85,7 +85,7 @@ class SearchViewModelTest {
     }
 
     @Test
-    fun clearQueryResetsState() = runTest {
+    fun clearQueryResetsState() = runTest(testDispatcher) {
         viewModel.state.test {
             awaitItem() // initial
 
@@ -100,14 +100,14 @@ class SearchViewModelTest {
     }
 
     @Test
-    fun blankQueryDoesNotCallRepository() = runTest {
+    fun blankQueryDoesNotCallRepository() = runTest(testDispatcher) {
         viewModel.onAction(SearchAction.OnQueryChanged("   "))
         testDispatcher.scheduler.advanceUntilIdle()
         assertEquals(0, fakeSearchRepository.searchCallCount)
     }
 
     @Test
-    fun errorKeepsEmptyResults() = runTest {
+    fun errorKeepsEmptyResults() = runTest(testDispatcher) {
         fakeSearchRepository.searchResult =
             Result.Error(DataError.Network.SERVER_ERROR)
 
@@ -119,9 +119,9 @@ class SearchViewModelTest {
 
             testDispatcher.scheduler.advanceUntilIdle()
 
-            val state = expectMostRecentItem()
-            assertTrue(state.results.isEmpty())
-            assertFalse(state.isLoading)
+            cancelAndIgnoreRemainingEvents()
         }
+        assertTrue(viewModel.state.value.results.isEmpty())
+        assertFalse(viewModel.state.value.isLoading)
     }
 }
