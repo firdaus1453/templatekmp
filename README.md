@@ -120,6 +120,9 @@ core/presentation → core/domain + core/designsystem
 
 ## 🚀 Getting Started
 
+> 🧙 **Quick Start with [GreenWizard](https://kmp.libstudio.my.id)**
+> Generate this template with your custom **project name** and **package ID** — no manual renaming needed. Just enter your details and download the ready-to-go project.
+
 ### Prerequisites
 
 - **Android Studio Ladybug** or later (or IntelliJ IDEA with KMP plugin)
