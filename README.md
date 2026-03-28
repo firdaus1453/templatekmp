@@ -101,7 +101,7 @@ core/presentation → core/domain + core/designsystem
 | [Koin](https://insert-koin.io) | 4.1.0 | Dependency injection |
 | [Ktor](https://ktor.io) | 3.2.3 | HTTP client |
 | [Room](https://developer.android.com/kotlin/multiplatform/room) | 2.7.2 | Database (offline-first) |
-| [Navigation Compose](https://www.jetbrains.com/help/kotlin-multiplatform-dev/compose-navigation-routing.html) | 2.9.0 | Navigation |
+| [Navigation Compose](https://www.jetbrains.com/help/kotlin-multiplatform-dev/compose-navigation-routing.html) | 2.9.0-beta04 | Navigation |
 | [DataStore](https://developer.android.com/topic/libraries/architecture/datastore) | 1.1.7 | Session storage |
 | [Coil](https://coil-kt.github.io/coil/) | 3.3.0 | Image loading |
 | [Kover](https://github.com/Kotlin/kotlinx-kover) | 0.9.1 | Test coverage |
