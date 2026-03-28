@@ -99,7 +99,12 @@ git --version
 
 ## 2. Clone & Menjalankan Project
 
-### 2.1 Clone Repository
+> 🧙 **Quick Start dengan [GreenWizard](https://kmp.libstudio.my.id/)**
+> Generate template ini dengan **nama project** dan **package ID** kustom milikmu — tanpa perlu rename manual. Cukup masukkan detail project-mu dan download project yang sudah siap pakai.
+>
+> Jika kamu menggunakan GreenWizard, langsung lanjut ke **[Section 2.2](#22-setup-localproperties)**.
+
+### 2.1 Clone Repository (Manual)
 
 ```bash
 git clone https://github.com/firdaus1453/TemplateKMP.git
@@ -1529,7 +1534,15 @@ projectVersionCode = "1"
 
 ### 15.5 Ganti Package Name
 
-Untuk mengganti dari `com.template.project` ke package name kamu:
+#### ✅ Cara Mudah: Gunakan GreenWizard (Recommended)
+
+Jika kamu **baru mulai project**, gunakan [**GreenWizard**](https://kmp.libstudio.my.id/) untuk generate template dengan package name dan nama project kustom — **tanpa perlu rename manual sama sekali**.
+
+> 🧙 Cukup masukkan **project name** dan **package ID** di [kmp.libstudio.my.id](https://kmp.libstudio.my.id/), lalu download project yang sudah siap pakai.
+
+#### 🔧 Cara Manual (untuk project yang sudah berjalan)
+
+Jika project sudah berjalan dan ingin mengganti dari `com.template.project` ke package name kamu:
 
 1. **`libs.versions.toml`**: Ganti `projectApplicationId`
 2. **Semua file Kotlin**: Ganti package declaration
