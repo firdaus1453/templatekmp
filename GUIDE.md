@@ -142,7 +142,7 @@ API_BASE_URL=https://dummyjson.com
 
 ```bash
 # Android (pastikan emulator/device sudah tersambung)
-./gradlew :composeApp:assembleDebug
+./gradlew :androidApp:assembleDebug
 # Atau klik tombol ▶ Run di Android Studio
 
 # Desktop (JVM)
@@ -160,7 +160,8 @@ API_BASE_URL=https://dummyjson.com
 ```
 TemplateKMP/
 ├── 🔧 build-logic/convention/    ← Gradle convention plugins (aturan build yang reusable)
-├── 📱 composeApp/                 ← Composition root (entry point semua platform)
+├── 📱 androidApp/                 ← Pure Android Entry Point (Activity, Manifest)
+├── 📱 composeApp/                 ← Composition root & shared UI (Android, iOS, Desktop)
 ├── 🏗️ core/
 │   ├── domain/                    ← Pure Kotlin: Result type, Error model, interfaces
 │   ├── data/                      ← Implementasi: Ktor client, DataStore, session
@@ -190,6 +191,7 @@ TemplateKMP/
 ### 3.3 Dependency Rules (Aturan Ketergantungan)
 
 ```
+androidApp → composeApp
 composeApp → core/* + feature/*/
 feature/*/presentation → feature/*/domain + core/presentation + core/designsystem
 feature/*/data → feature/*/domain + core/domain + core/data
@@ -205,6 +207,7 @@ core/presentation → core/domain + core/designsystem
 | `data` | `domain` miliknya + `core/domain` + `core/data` | `presentation`, feature lain |
 | `presentation` | `domain` miliknya + `core/presentation` + `core/designsystem` | `data` layer, feature lain |
 | `composeApp` | Semua module | - |
+| `androidApp` | `composeApp` | module lain secara langsung |
 
 > 🔑 **Prinsip Utama:**
 > - Feature A **tidak boleh** depend ke Feature B
@@ -1386,10 +1389,10 @@ val apiKey = BuildKonfig.NEW_API_KEY
 
 **Via Terminal:**
 ```bash
-./gradlew :composeApp:assembleDebug
+./gradlew :androidApp:assembleDebug
 
 # Install ke device yang terhubung
-adb install composeApp/build/outputs/apk/debug/composeApp-debug.apk
+adb install androidApp/build/outputs/apk/debug/androidApp-debug.apk
 ```
 
 ### 14.2 iOS (macOS Only)
@@ -1462,7 +1465,7 @@ keytool -genkey -v -keystore release-keystore.jks \
   -alias my-app-key
 ```
 
-**2. Tambahkan signing config di `composeApp/build.gradle.kts`:**
+**2. Tambahkan signing config di `androidApp/build.gradle.kts`:**
 
 ```kotlin
 android {
@@ -1493,10 +1496,10 @@ android {
 
 ```bash
 # APK (untuk testing di device)
-./gradlew :composeApp:assembleRelease
+./gradlew :androidApp:assembleRelease
 
 # AAB (untuk upload ke Play Store) ← GUNAKAN INI!
-./gradlew :composeApp:bundleRelease
+./gradlew :androidApp:bundleRelease
 ```
 
 > ⚠️ **PENTING:**

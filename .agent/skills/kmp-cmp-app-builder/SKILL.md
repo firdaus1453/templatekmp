@@ -34,7 +34,8 @@ Use **multi-module Clean Architecture**:
 ```
 root/
 ├── build-logic/convention/    # Gradle convention plugins
-├── composeApp/                # Composition root (all platforms)
+├── androidApp/                # Pure Android entry point (Activity, Manifest)
+├── composeApp/                # Composition root & shared UI (Android, iOS, Desktop)
 ├── core/
 │   ├── domain/                # Pure Kotlin: models, Result, interfaces
 │   ├── data/                  # Ktor, DataStore, session, HttpClientFactory
@@ -52,6 +53,7 @@ root/
 ### Dependency rules (CRITICAL)
 
 ```
+androidApp → composeApp
 composeApp → core/* + feature/*/
 feature/*/presentation → feature/*/domain + core/presentation + core/designsystem
 feature/*/data → feature/*/domain + core/domain + core/data
@@ -155,8 +157,8 @@ See [PRODUCTION.md](references/PRODUCTION.md).
 1. `./gradlew build` — compiles without errors
 2. `./gradlew allTests` — all tests pass
 3. `./gradlew koverVerify` — coverage ≥ 60%
-4. `./gradlew :composeApp:assembleRelease` — release APK builds
-5. `./gradlew :composeApp:bundleRelease` — release AAB for Play Store
+4. `./gradlew :androidApp:assembleRelease` — release APK builds
+5. `./gradlew :androidApp:bundleRelease` — release AAB for Play Store
 6. Test release build on physical device
 
 ---
